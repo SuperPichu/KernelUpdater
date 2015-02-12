@@ -1,14 +1,18 @@
 package org.superpichu.kernelupdater;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.RecoverySystem;
 import android.os.StrictMode;
 import android.util.Xml;
 import android.view.Menu;
@@ -16,35 +20,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
-
-import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.ArrayList;
+import java.util.List;
+import eu.chainfire.libsuperuser.Shell;
 
 
 public class MainActivity extends Activity {
 
 
     public boolean checked = false;
+    public boolean downloaded = false;
     public String[] data = new String[3];
     DownloadManager dm;
+    public String path;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +61,17 @@ public class MainActivity extends Activity {
                 break;
         }
         skuText.setText("Your Shield Tablet is the " + device + " version!");
+        if(!Shell.SU.available()){
+            DialogFragment newFragment = new displayDialog();
+            newFragment.show(getFragmentManager(), "error");
+        }
+        try {
+            TextView version = (TextView) findViewById(R.id.currentText);
+            Resources res = getResources();
+            version.setText(res.getString(R.string.currentLabel) +" "+ new SUMethod().execute("version").get());
+        }catch (Throwable throwable){
+        }
+
     }
 
     @Override
@@ -84,22 +90,41 @@ public class MainActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("message/rfc822");
+            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"chrismidkiff15@gmail.com"});
+            i.putExtra(Intent.EXTRA_SUBJECT, "Kernel Updater Feedback");
+            try {
+                startActivity(Intent.createChooser(i, "Send mail..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+            }
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void downloadUpdate(){
+    public void downloadUpdate() {
         dm = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         Uri uri = Uri.parse(data[2]);
-        Uri dest = Uri.parse("file:///storage/emulated/0/kernel.zip");
-        DownloadManager.Request request = new DownloadManager.Request(uri);
-        request.setTitle("Kernel Download")
-               .setDescription("Version: "+data[1]);
-        request.setVisibleInDownloadsUi(true);
-        request.setDestinationUri(dest);
-        long reference = dm.enqueue(request);
+        String[] urlArray = data[2].split("/");
+        String fileName = urlArray[urlArray.length - 1];
+        path = "/storage/emulated/0/Kernel/" + fileName;
+        File file = new File(path);
+        if (file.exists() == true) {
+            Toast.makeText(this, "File already downloaded", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this,"Downloading",Toast.LENGTH_SHORT).show();
+            Uri dest = Uri.parse("file://"+path);
+            DownloadManager.Request request = new DownloadManager.Request(uri);
+            request.setTitle("Kernel Download")
+                    .setDescription(fileName);
+            request.setVisibleInDownloadsUi(true);
+            request.setDestinationUri(dest);
+            long reference = dm.enqueue(request);
+
+        }
+        downloaded = true;
     }
 
     public void updateCheck() throws XmlPullParserException{
@@ -129,6 +154,7 @@ public class MainActivity extends Activity {
     }
 
     public InputStream getXML(String urlString) throws IOException {
+        //Fast enough that I don't care that networking is in the main thread.
         URL url = new URL(urlString);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         return conn.getInputStream();
@@ -137,9 +163,10 @@ public class MainActivity extends Activity {
 
     public void updateButton(View view) throws XmlPullParserException{
         Toast.makeText(this,"Checking for updates",Toast.LENGTH_SHORT).show();
-        TextView version = (TextView) findViewById(R.id.versionText);
+        TextView version = (TextView) findViewById(R.id.latestText);
         updateCheck();
-        version.setText(data[1]);
+        Resources res = getResources();
+        version.setText(res.getString(R.string.latestLabel) +" "+ data[1]);
         checked = true;
     }
 
@@ -147,8 +174,6 @@ public class MainActivity extends Activity {
         String text = "";
 
         if(checked){
-            text="Downloading...";
-            Toast.makeText(this,"Downloading",Toast.LENGTH_SHORT).show();
             downloadUpdate();
         }else{
             Toast.makeText(this, "Check for updates first", Toast.LENGTH_SHORT).show();
@@ -158,14 +183,47 @@ public class MainActivity extends Activity {
     }
 
     public void installButton(View view){
-
-        try {
-            URI uri = URI.create("file:///cache/kernel.zip");
-            File zip = new File(uri);
-            RecoverySystem.installPackage(this,zip);
-        }catch (IOException e) {
-            Toast.makeText(this,"File Not Found",Toast.LENGTH_LONG).show();
+        if(Shell.SU.available() && checked && downloaded){
+            new SUMethod().execute("install");
+        }else{
+            DialogFragment newFragment = new displayDialog();
+            newFragment.show(getFragmentManager(), "error");
         }
 
+    }
+
+    private class SUMethod extends AsyncTask<String, Void, String>{
+        protected String doInBackground(String... params) {
+            String s="";
+            switch (params[0]) {
+                case "version":
+                    s = Shell.SH.run("uname -r | cut -d+ -f2").get(0);
+                    break;
+                case "install":
+                    List<String> commands = new ArrayList<String>();
+                    commands.add("rm /cache/recovery/*.zip");
+                    commands.add("cp "+path+" /cache/recovery/update.zip");
+                    commands.add("echo \"--update_package=/cache/recovery/update.zip\" > /cache/recovery/command");
+                    commands.add("reboot recovery");
+                    s = Shell.SU.run(commands).get(0);
+
+            }
+            return s;
+        }
+    }
+
+    public static class displayDialog extends DialogFragment{
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Error");
+            builder.setMessage("Do you have root?\nDid you hit update & download first?");
+            builder.setNeutralButton("OK",new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    //OK Button
+                }
+            });
+
+            return builder.create();
+        }
     }
 }

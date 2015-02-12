@@ -19,50 +19,53 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/placeholderVersion"
-        android:id="@+id/versionLabel"
+        android:text="@string/latestLabel"
+        android:id="@+id/latestText"
         android:layout_below="@+id/skuText"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:textAlignment="center" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/updateText"
         android:id="@+id/updateButton"
-        android:layout_marginTop="62dp"
-        android:layout_below="@+id/versionLabel"
-        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
         android:clickable="true"
-        android:onClick="updateButton" />
+        android:onClick="updateButton"
+        android:layout_below="@+id/currentText"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/downloadText"
         android:id="@+id/downloadButton"
+        android:nestedScrollingEnabled="false"
+        android:onClick="downloadButton"
         android:layout_below="@+id/updateButton"
         android:layout_alignEnd="@+id/updateButton"
-        android:layout_alignStart="@+id/updateButton"
-        android:nestedScrollingEnabled="false"
-        android:onClick="downloadButton" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/versionText"
-        android:textSize="15sp"
-        android:layout_above="@+id/updateButton"
-        android:layout_alignEnd="@+id/updateButton" />
+        android:layout_alignStart="@+id/updateButton" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Install"
         android:id="@+id/installButton"
+        android:onClick="installButton"
         android:layout_below="@+id/downloadButton"
         android:layout_alignStart="@+id/downloadButton"
-        android:layout_alignEnd="@+id/versionText"
-        android:onClick="installButton" />
+        android:layout_alignEnd="@+id/downloadButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/currentLabel"
+        android:id="@+id/currentText"
+        android:layout_below="@+id/latestText"
+        android:layout_alignStart="@+id/latestText"
+        android:textAlignment="center" />
 
 </RelativeLayout>

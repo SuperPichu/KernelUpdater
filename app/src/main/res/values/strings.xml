@@ -3,10 +3,11 @@
 
     <string name="app_name">KernelUpdater</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Send Feedback</string>
     <string name="updateText">Check for Updates</string>
     <string name="placeholderSKU">Your Shield Tablet is the cool version!</string>
-    <string name="placeholderVersion">Latest Version:</string>
+    <string name="latestLabel">Latest Version:</string>
+    <string name="currentLabel">Current Version:</string>
     <string name="downloadText">Download</string>
     <string name="feed">http://superpichu.org/kernel/update.xml</string>
 
