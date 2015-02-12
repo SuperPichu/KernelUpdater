@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.RecoverySystem;
 import android.os.StrictMode;
 import android.util.Xml;
 import android.view.Menu;
@@ -25,11 +26,14 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import javax.xml.parsers.ParserConfigurationException;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -150,6 +154,18 @@ public class MainActivity extends Activity {
             Toast.makeText(this, "Check for updates first", Toast.LENGTH_SHORT).show();
         }
 
+
+    }
+
+    public void installButton(View view){
+
+        try {
+            URI uri = URI.create("file:///cache/kernel.zip");
+            File zip = new File(uri);
+            RecoverySystem.installPackage(this,zip);
+        }catch (IOException e) {
+            Toast.makeText(this,"File Not Found",Toast.LENGTH_LONG).show();
+        }
 
     }
 }

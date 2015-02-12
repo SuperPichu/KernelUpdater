@@ -55,4 +55,14 @@
         android:layout_above="@+id/updateButton"
         android:layout_alignEnd="@+id/updateButton" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Install"
+        android:id="@+id/installButton"
+        android:layout_below="@+id/downloadButton"
+        android:layout_alignStart="@+id/downloadButton"
+        android:layout_alignEnd="@+id/versionText"
+        android:onClick="installButton" />
+
 </RelativeLayout>
