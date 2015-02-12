@@ -110,7 +110,6 @@ public class MainActivity extends Activity {
             int eventType = parser.getEventType();
             while(eventType != XmlPullParser.END_DOCUMENT) {
                 String name = parser.getName();
-                System.out.println(name);
                 if (name != null) {
                     if (name.equals("version")){
                         data[1] = parser.nextText();
@@ -119,9 +118,6 @@ public class MainActivity extends Activity {
                     }
                 }
                 eventType = parser.next();
-            }
-            for(int i = 0;i < data.length;i++){
-                System.out.println(data[i]);
             }
         } catch (IOException e) {
             e.printStackTrace();
