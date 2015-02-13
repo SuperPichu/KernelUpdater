@@ -16,7 +16,8 @@
         android:layout_marginTop="65dp"
         android:textAlignment="center"
         android:autoText="false"
-        android:maxLines="2" />
+        android:maxLines="2"
+        android:textIsSelectable="false" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -36,8 +37,10 @@
         android:id="@+id/updateButton"
         android:clickable="true"
         android:onClick="updateButton"
-        android:layout_above="@+id/downloadButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginBottom="43dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/skuText"
+        android:minWidth="175sp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -46,9 +49,10 @@
         android:id="@+id/downloadButton"
         android:nestedScrollingEnabled="false"
         android:onClick="downloadButton"
-        android:layout_above="@+id/installButton"
-        android:layout_alignStart="@+id/updateButton"
-        android:layout_alignEnd="@+id/updateButton" />
+        android:layout_alignTop="@+id/updateButton"
+        android:layout_alignStart="@+id/skuText"
+        android:layout_marginStart="83dp"
+        android:minWidth="175dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -56,10 +60,9 @@
         android:text="Install"
         android:id="@+id/installButton"
         android:onClick="installButton"
-        android:layout_marginBottom="167dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/downloadButton"
-        android:layout_alignEnd="@+id/downloadButton" />
+        android:minWidth="175dp"
+        android:layout_alignTop="@+id/downloadButton"
+        android:layout_toEndOf="@+id/skuText" />
 
     <TextView
         android:layout_width="wrap_content"

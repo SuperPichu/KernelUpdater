@@ -8,12 +8,15 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.util.Xml;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,8 +26,10 @@ import android.widget.Toast;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -40,6 +45,8 @@ public class MainActivity extends Activity {
     public String[] data = new String[3];
     DownloadManager dm;
     public String path;
+    String bbPath = " ";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,11 +72,37 @@ public class MainActivity extends Activity {
             DialogFragment newFragment = new displayDialog();
             newFragment.show(getFragmentManager(), "error");
         }
+        bbPath = "/data/data/" + this.getPackageName()+"/busybox";
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(!prefs.getBoolean("firstTime", false)) {
+            SharedPreferences.Editor editor = prefs.edit();
+            InputStream in = null;
+            OutputStream out = null;
+            AssetManager am = getAssets();
+            try{
+                in = am.open("busybox");
+                out=new FileOutputStream(bbPath);
+                byte[] buffer = new byte[1024];
+                int read;
+                while((read = in.read(buffer)) != -1){
+                    out.write(buffer, 0, read);
+                }
+                in.close();
+                out.flush();
+                out.close();
+                new SUMethod().execute("busybox");
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            editor.putBoolean("firstTime", true);
+            editor.commit();
+        }
         try {
             TextView version = (TextView) findViewById(R.id.currentText);
             Resources res = getResources();
-            version.setText(res.getString(R.string.currentLabel) +" "+ new SUMethod().execute("version").get());
+            version.setText(res.getString(R.string.currentLabel) + " " + new SUMethod().execute("version").get());
         }catch (Throwable throwable){
+            throwable.printStackTrace();
         }
 
     }
@@ -196,7 +229,7 @@ public class MainActivity extends Activity {
             String s="";
             switch (params[0]) {
                 case "version":
-                    s = Shell.SH.run("uname -r | cut -d+ -f2").get(0);
+                    s = Shell.SH.run(bbPath+" uname -r |"+bbPath+" cut -d+ -f2").get(0);
                     break;
                 case "install":
                     List<String> commands = new ArrayList<>();
@@ -205,7 +238,10 @@ public class MainActivity extends Activity {
                     commands.add("echo \"--update_package=/cache/recovery/update.zip\" > /cache/recovery/command");
                     commands.add("reboot recovery");
                     s = Shell.SU.run(commands).get(0);
-
+                    break;
+                case "busybox":
+                    Shell.SU.run("chmod 755 "+bbPath);
+                    break;
             }
             return s;
         }
