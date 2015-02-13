@@ -45,7 +45,6 @@ public class MainActivity extends Activity {
     public String[] data = new String[3];
     public String path;
     String bbPath = " ";
-    SUMethod su;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,9 +105,7 @@ public class MainActivity extends Activity {
                 out.close();
 				
 				//Make busybox executable
-                su = new SUMethod();
-                su.execute("busybox");
-                su.cancel(true);
+                new SUMethod().execute("busybox");
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -119,13 +116,10 @@ public class MainActivity extends Activity {
 			//Get current Version
             TextView version = (TextView) findViewById(R.id.currentText);
             Resources res = getResources();
-            su = new SUMethod();
-            su.execute("version");
-            version.setText(res.getString(R.string.currentLabel) + " " + su.get());
+            version.setText(res.getString(R.string.currentLabel) + " " + new SUMethod().execute("version").get());
         }catch (Throwable throwable){
             throwable.printStackTrace();
         }
-        su.cancel(true);
     }
 
     @Override
@@ -252,9 +246,7 @@ public class MainActivity extends Activity {
     public void installButton(View view){
 		//Check for root
         if(Shell.SU.available() && checked && downloaded){
-            su = new SUMethod();
-            su.execute("install");
-            su.cancel(true);
+            new SUMethod().execute("install");
         }else{
             DialogFragment newFragment = new displayDialog();
             newFragment.show(getFragmentManager(), "error");
