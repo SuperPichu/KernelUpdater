@@ -92,7 +92,7 @@ public class MainActivity extends Activity {
         if (id == R.id.action_settings) {
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("message/rfc822");
-            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"chrismidkiff15@gmail.com"});
+            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"feedback@superpichu.org"});
             i.putExtra(Intent.EXTRA_SUBJECT, "Kernel Updater Feedback");
             try {
                 startActivity(Intent.createChooser(i, "Send mail..."));
@@ -111,7 +111,7 @@ public class MainActivity extends Activity {
         String fileName = urlArray[urlArray.length - 1];
         path = "/storage/emulated/0/Kernel/" + fileName;
         File file = new File(path);
-        if (file.exists() == true) {
+        if (file.exists()) {
             Toast.makeText(this, "File already downloaded", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this,"Downloading",Toast.LENGTH_SHORT).show();
@@ -121,7 +121,7 @@ public class MainActivity extends Activity {
                     .setDescription(fileName);
             request.setVisibleInDownloadsUi(true);
             request.setDestinationUri(dest);
-            long reference = dm.enqueue(request);
+            dm.enqueue(request);
 
         }
         downloaded = true;
@@ -171,7 +171,6 @@ public class MainActivity extends Activity {
     }
 
     public void downloadButton(View view){
-        String text = "";
 
         if(checked){
             downloadUpdate();
@@ -200,7 +199,7 @@ public class MainActivity extends Activity {
                     s = Shell.SH.run("uname -r | cut -d+ -f2").get(0);
                     break;
                 case "install":
-                    List<String> commands = new ArrayList<String>();
+                    List<String> commands = new ArrayList<>();
                     commands.add("rm /cache/recovery/*.zip");
                     commands.add("cp "+path+" /cache/recovery/update.zip");
                     commands.add("echo \"--update_package=/cache/recovery/update.zip\" > /cache/recovery/command");
