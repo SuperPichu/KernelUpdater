@@ -88,9 +88,10 @@ public class MainActivity extends Activity {
         //Check if first run
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if(!prefs.getBoolean("firstTime", false)) {
-			
-			//Copy busybox binary.
+			//Intialize variable for empty mounts
             SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("cifsEmpty",true);
+            //Copy busybox binary.
             AssetManager am = getAssets();
             try{
                 InputStream in = am.open("busybox");
@@ -146,6 +147,15 @@ public class MainActivity extends Activity {
                 startActivity(Intent.createChooser(i, "Send mail..."));
             } catch (android.content.ActivityNotFoundException ex) {
                 Toast.makeText(this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if (id == R.id.cifs_settings) {
+            if (Shell.SU.available()){
+                Intent intent = new Intent(this, CIFSMounts.class);
+                startActivity(intent);
+            }else{
+                Toast.makeText(this, "Root Required", Toast.LENGTH_SHORT).show();
             }
         }
 

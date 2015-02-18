@@ -22,4 +22,5 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'eu.chainfire:libsuperuser:1.0.0.+'
+    compile files('/home/chris/Stuff/AndroidStudio/KernelUpdater/libs/simple-xml-2.7.1.jar')
 }

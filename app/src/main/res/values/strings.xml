@@ -9,5 +9,9 @@
     <string name="currentLabel">Current Version:</string>
     <string name="downloadText">Download</string>
     <string name="feed">http://superpichu.org/kernel/update.xml</string>
+    <string name="title_activity_cifsmounts">CIFSMounts</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="cifs_mounts">CIFS Mounts</string>
+    <string name="title_activity_add_mount">AddMount</string>
 
 </resources>
