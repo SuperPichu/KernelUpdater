@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">SP Kernel Updater</string>
+    <string name="app_name">SP Kernel Manager</string>
     <string name="action_settings">Send Feedback</string>
     <string name="updateText">Check for Updates</string>
     <string name="placeholderSKU">Your Shield Tablet is the cool version!</string>
@@ -9,9 +9,8 @@
     <string name="currentLabel">Current Version:</string>
     <string name="downloadText">Download</string>
     <string name="feed">http://superpichu.org/kernel/update.xml</string>
-    <string name="title_activity_cifsmounts">CIFSMounts</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_cifsmounts">CIFS Mounts</string>
     <string name="cifs_mounts">CIFS Mounts</string>
-    <string name="title_activity_add_mount">AddMount</string>
+    <string name="title_activity_add_mount">Add Mount</string>
 
 </resources>
