@@ -54,6 +54,7 @@ public class MainActivity extends Activity {
         StrictMode.setThreadPolicy(policy);
 
         //Set layout
+        //Set layout
         setContentView(R.layout.activity_main);
 
         //Initialize text and get sku
