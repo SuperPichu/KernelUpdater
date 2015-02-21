@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -91,6 +92,10 @@ public class CIFSMounts extends ListActivity {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Share share = data.share.get(position);
+        mount(share);
+    }
+    public void mount(Share share){
+
         File dir = new File("/mnt/cifs" + share.mountPoint);
         if (!dir.exists()) {
             List<String> commands = new ArrayList<>();
@@ -100,5 +105,10 @@ public class CIFSMounts extends ListActivity {
         }
         String[] command = {"mount -t cifs -o ip=" + share.ipAddress + ",unc=//" + share.ipAddress + "/" + share.shareName + ",user=" + share.userName + ",pass=" + share.password + ",noperm //" + share.ipAddress + "/" + share.shareName + " /mnt/cifs/" + share.mountPoint};
         new Shell().run(Shell.SU.shellMountMaster(),command,null,true);
+
+    }
+    public void unmount(Share share){
+        Shell.SU.run("umount /mnt/cifs/"+share.mountPoint);
+        Toast.makeText(this, "Share unmounted", Toast.LENGTH_SHORT).show();
     }
 }
