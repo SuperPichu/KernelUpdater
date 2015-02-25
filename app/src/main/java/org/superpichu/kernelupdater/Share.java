@@ -1,6 +1,5 @@
 package org.superpichu.kernelupdater;
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 import java.io.File;
 
@@ -17,8 +16,12 @@ public class Share {
     public String mountPoint;
     @Element
     public String shareName;
+    @Element
+    public int id;
+
     public File output;
 
+    public boolean status;
     public static final String ROOT="share";
     public static final String SHARE="shareName";
     public static final String IP="ipAddress";
@@ -26,4 +29,5 @@ public class Share {
     public static final String USER="userName";
     public static final String PASS="password";
     public static final String POINT="mountPoint";
+    public static final String OUT="shares.xml";
 }

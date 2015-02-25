@@ -12,5 +12,6 @@
     <string name="title_activity_cifsmounts">CIFS Mounts</string>
     <string name="cifs_mounts">CIFS Mounts</string>
     <string name="title_activity_add_mount">Add Mount</string>
+    <string name="title_activity_edit_mount">Edit Mount</string>
 
 </resources>

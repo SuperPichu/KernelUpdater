@@ -85,7 +85,8 @@ public class MainActivity extends Activity {
 
         //Copy busybox binary if first run, set path regardless
         bbPath = "/data/data/" + this.getPackageName()+"/busybox";
-		
+        Busybox.path = bbPath;
+
         //Check if first run
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if(!prefs.getBoolean("firstTime", false)) {

@@ -36,6 +36,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.superpichu.kernelupdater.CIFSMounts" />
         </activity>
+        <activity
+            android:name=".EditMount"
+            android:label="@string/title_activity_edit_mount"
+            android:parentActivityName=".CIFSMounts" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.superpichu.kernelupdater.CIFSMounts" />
+        </activity>
     </application>
 
 </manifest>

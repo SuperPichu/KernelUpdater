@@ -1,23 +1,37 @@
 package org.superpichu.kernelupdater;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import java.io.File;
-import java.util.Random;
 
-public class AddMount extends Activity {
 
+/**
+ * Created by chris on 2/24/15.
+ */
+public class EditMount extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
         setContentView(R.layout.activity_add_mount);
+        EditText displayName = (EditText)findViewById(R.id.displayName);
+        EditText address = (EditText)findViewById(R.id.ipAddress);
+        EditText share = (EditText)findViewById(R.id.shareName);
+        EditText user = (EditText)findViewById(R.id.userName);
+        EditText pass = (EditText)findViewById(R.id.password);
+        EditText mount = (EditText)findViewById(R.id.mountPoint);
+        displayName.setText(intent.getStringExtra("name"));
+        address.setText(intent.getStringExtra("address"));
+        share.setText(intent.getStringExtra("share"));
+        user.setText(intent.getStringExtra("user"));
+        pass.setText(intent.getStringExtra("pass"));
+        mount.setText(intent.getStringExtra("mountpoint"));
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
@@ -25,7 +39,6 @@ public class AddMount extends Activity {
         inflater.inflate(R.menu.add_actions, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
@@ -39,7 +52,6 @@ public class AddMount extends Activity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
     public void saveMount() {
         Share share = new Share();
         EditText et = (EditText)findViewById(R.id.displayName);
@@ -54,10 +66,8 @@ public class AddMount extends Activity {
         share.password = et.getText().toString();
         et = (EditText)findViewById(R.id.mountPoint);
         share.mountPoint = et.getText().toString();
-        Random rnd = new Random();
-        share.id = (int)rnd.nextDouble()*1000000000;
         share.output = new File(getFilesDir(), "shares.xml");
-        SaveMount.write(share,false);
+        SaveMount.write(share,true);
         finish();
     }
 }
