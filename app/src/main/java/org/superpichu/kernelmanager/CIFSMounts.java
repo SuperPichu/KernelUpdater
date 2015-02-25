@@ -1,4 +1,4 @@
-package org.superpichu.kernelupdater;
+package org.superpichu.kernelmanager;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -67,9 +67,7 @@ public class CIFSMounts extends ListActivity {
                     }else{
                         statusStr = " Not Mounted";
                     }
-                    System.out.println("*"+share.password+"*");
                     share.password = new String( Base64.decode( share.password, Base64.DEFAULT ) );
-                    System.out.println("*"+share.password+"*");
                     item.put("displayName", share.displayName);
                     item.put("Summary", share.mountPoint + statusStr);
                     list.add(item);
@@ -167,7 +165,6 @@ public class CIFSMounts extends ListActivity {
         }
         String[] command = {"mount -t cifs -o ip=" + share.ipAddress + ",unc=//" + share.ipAddress + "/" + share.shareName + ",user=" + share.userName + ",pass=" + share.password + ",noperm //" + share.ipAddress + "/" + share.shareName + " /mnt/cifs/" + share.mountPoint};
         List<String> result = new Shell().run(Shell.SU.shellMountMaster(), command, null, true);
-        if(result != null && result.size()>0) System.out.println(result.get(0));
         Toast.makeText(this, "Share mounted", Toast.LENGTH_SHORT).show();
         status = MountStatus.check(share);
         mount.setEnabled(!status);

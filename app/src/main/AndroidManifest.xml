@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.superpichu.kernelupdater" >
+    package="org.superpichu.kernelmanager" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="org.superpichu.kernelmanager.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,28 +21,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CIFSMounts"
+            android:name="org.superpichu.kernelmanager.CIFSMounts"
             android:label="@string/title_activity_cifsmounts"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName="org.superpichu.kernelmanager.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.superpichu.kernelupdater.MainActivity" />
+                android:value="org.superpichu.kernelmanager.MainActivity" />
         </activity>
         <activity
-            android:name=".AddMount"
+            android:name="org.superpichu.kernelmanager.AddMount"
             android:label="@string/title_activity_add_mount"
-            android:parentActivityName=".CIFSMounts" >
+            android:parentActivityName="org.superpichu.kernelmanager.CIFSMounts" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.superpichu.kernelupdater.CIFSMounts" />
+                android:value="org.superpichu.kernelmanager.CIFSMounts" />
         </activity>
         <activity
-            android:name=".EditMount"
+            android:name="org.superpichu.kernelmanager.EditMount"
             android:label="@string/title_activity_edit_mount"
-            android:parentActivityName=".CIFSMounts" >
+            android:parentActivityName="org.superpichu.kernelmanager.CIFSMounts" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.superpichu.kernelupdater.CIFSMounts" />
+                android:value="org.superpichu.kernelmanager.CIFSMounts" />
         </activity>
     </application>
 

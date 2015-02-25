@@ -1,4 +1,4 @@
-package org.superpichu.kernelupdater;
+package org.superpichu.kernelmanager;
 
 import java.util.List;
 
@@ -14,9 +14,7 @@ public class MountStatus {
         List<String> result = Shell.run(Shell.SU.shellMountMaster(), command, null, true);
         if(result.size()>0 && !result.get(0).contains("not")) {
             status = true;
-            System.out.println(result.get(0));
         }else{
-            if(result.size()>0) System.out.println("here "+result.get(0));
             status = false;
         }
         return status;

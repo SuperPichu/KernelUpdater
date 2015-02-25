@@ -5,10 +5,10 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "org.superpichu.kernelupdater"
+        applicationId "org.superpichu.kernelmanager"
         minSdkVersion 21
         targetSdkVersion 21
-        versionCode 7
+        versionCode 1
         versionName "2.0"
     }
     buildTypes {

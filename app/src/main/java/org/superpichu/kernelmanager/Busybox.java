@@ -1,4 +1,4 @@
-package org.superpichu.kernelupdater;
+package org.superpichu.kernelmanager;
 
 /**
  * Created by chris on 2/24/15.

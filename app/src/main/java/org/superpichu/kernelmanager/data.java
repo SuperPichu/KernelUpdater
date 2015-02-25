@@ -1,4 +1,4 @@
-package org.superpichu.kernelupdater;
+package org.superpichu.kernelmanager;
 
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;

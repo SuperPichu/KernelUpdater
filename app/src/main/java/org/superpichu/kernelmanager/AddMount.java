@@ -1,4 +1,4 @@
-package org.superpichu.kernelupdater;
+package org.superpichu.kernelmanager;
 
 import android.app.Activity;
 import android.os.Bundle;
